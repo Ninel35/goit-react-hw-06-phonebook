@@ -1,11 +1,17 @@
+import './../store/store.js'
+
 import React, { useEffect, useState } from 'react'
 import Filter from './Filter/Filter'
 import Contacts from './Contacts/Contacts'
 import FormUser  from './FormUser/FormUser'
+import { useDispatch, useSelector } from 'react-redux'
+import { addContactAction, deleteContactsAction } from 'store/contacts/contactsSlice.js'
 
 export const App = () => {
+  // const [contacts, setContacts] = useState(JSON.parse(localStorage.getItem('contacts')) ?? [])
+  const { contacts } = useSelector((state) => state.contacts)
+  const dispatch = useDispatch()
 
-  const [contacts, setContacts] = useState(JSON.parse(localStorage.getItem('contacts')) ?? [])
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
@@ -14,14 +20,13 @@ export const App = () => {
 
   
   const sendUserData = (data) => {
-    setContacts((prev) => {
-      if (prev.find(({ name }) => name.toLowerCase() === data.name.toLowerCase())) {
-        alert(data.name + " is already in contacts")
-        return;
-      }
-      return [...prev, data]
-    })
+    if (contacts.find(({ name }) => name.toLowerCase() === data.name.toLowerCase())) {
+      alert(data.name + " is already in contacts")
+      return;
+    }
+    dispatch(addContactAction(data))
   }
+
 
     const handlerFilter = (evt) => {
       setFilter(evt.target.value)
@@ -29,11 +34,7 @@ export const App = () => {
     
   
   const handleDelete = (evt) => {
-      setContacts((prev) => {
-        return prev.filter(item => {
-          return item.id !== evt.target.parentElement.id
-        })
-      })
+    dispatch(deleteContactsAction(evt.target.parentElement.id))
   }
   
     const getVisibleContacts = () => {

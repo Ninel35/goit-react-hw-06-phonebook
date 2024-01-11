@@ -1,15 +1,21 @@
 import { nanoid } from 'nanoid';
 import css from './FormUser.module.css';
-import React, { useState } from 'react'
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { addNameAction, addNumberAction } from 'store/actions';
 
 const FormUser = ({sendUserData}) => {
-    const [name, setName] = useState('')
-    const [number, setNumber] = useState('')
+    // const [name, setName] = useState('')
+    // const [number, setNumber] = useState('')
+    const {name, number} = useSelector((state)=> state)
+    const dispatch = useDispatch()
    
     const handleChange = ({ target: { name, value } }) => {
-        if (name === 'name') setName(value)
-        else setNumber(value)
-    }
+        if (name === 'name') 
+            dispatch(addNameAction(value))
+        else 
+            dispatch(addNumberAction(value))
+        }
     
     const handlerSubmit = (evt) => {
         evt.preventDefault();
