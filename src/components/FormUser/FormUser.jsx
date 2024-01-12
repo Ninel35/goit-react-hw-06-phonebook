@@ -2,20 +2,29 @@ import { nanoid } from 'nanoid';
 import css from './FormUser.module.css';
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { addNameAction, addNumberAction } from 'store/actions';
+import { addNameAction, addNumberAction } from 'store/FormUser/formSlice';
+import { addContactAction } from 'store/contacts/contactsSlice';
 
-const FormUser = ({sendUserData}) => {
-    // const [name, setName] = useState('')
-    // const [number, setNumber] = useState('')
-    const {name, number} = useSelector((state)=> state)
+const FormUser = () => {
+    const { name, number } = useSelector((state) => state.formUser)
+    const { contacts } = useSelector((state) => state.contacts)
+    
     const dispatch = useDispatch()
+
+    const sendUserData = (data) => {
+        if (contacts.find(({ name }) => name.toLowerCase() === data.name.toLowerCase())) {
+            alert(data.name + " is already in contacts")
+            return;
+        }
+        dispatch(addContactAction(data))
+    }
    
     const handleChange = ({ target: { name, value } }) => {
-        if (name === 'name') 
+        if (name === 'name')
             dispatch(addNameAction(value))
-        else 
+        else
             dispatch(addNumberAction(value))
-        }
+    }
     
     const handlerSubmit = (evt) => {
         evt.preventDefault();
@@ -23,7 +32,7 @@ const FormUser = ({sendUserData}) => {
             id: nanoid(),
             name: name,
             number: number
-         }
+        }
         sendUserData(newContact);
 
         evt.target.elements.name.value = "";

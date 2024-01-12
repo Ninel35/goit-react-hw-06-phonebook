@@ -1,4 +1,15 @@
-const Filter = ({handlerFilter}) => {
+import { setFilterAction } from "store/Filter/filterSlice";
+import React from 'react'
+import { useDispatch } from "react-redux";
+
+
+const Filter = () => {
+    const dispatch = useDispatch()
+    
+    const handlerFilter = (evt) => {
+        dispatch(setFilterAction(evt.target.value))
+    }
+    
     return (
         <>
          
