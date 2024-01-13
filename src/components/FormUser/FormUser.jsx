@@ -1,13 +1,15 @@
 import { nanoid } from 'nanoid';
 import css from './FormUser.module.css';
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { addNameAction, addNumberAction } from 'store/FormUser/formSlice';
 import { addContactAction } from 'store/contacts/contactsSlice';
 
 const FormUser = () => {
-    const { name, number } = useSelector((state) => state.formUser)
+  
     const { contacts } = useSelector((state) => state.contacts)
+    
+    const  [name, setName]  = useState('')
+    const [number, setNumber] = useState('')
     
     const dispatch = useDispatch()
 
@@ -21,9 +23,10 @@ const FormUser = () => {
    
     const handleChange = ({ target: { name, value } }) => {
         if (name === 'name')
-            dispatch(addNameAction(value))
+            setName(value)
         else
-            dispatch(addNumberAction(value))
+            setNumber(value)
+
     }
     
     const handlerSubmit = (evt) => {
